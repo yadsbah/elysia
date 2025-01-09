@@ -757,4 +757,28 @@ describe('Query Validator', () => {
 			.then((x) => x.json())
 			.then(console.log)
 	})
+
+	it('optional array field remains undefined when not provided', async () => {
+		const app = new Elysia().get('/', ({ query }) => query, {
+			query: t.Object({
+				optionalArray: t.Optional(t.Array(t.String()))
+			})
+		})
+		const res = await app.handle(req('/'))
+
+		expect(await res.json()).toEqual({})
+		expect(res.status).toBe(200)
+	})
+
+	it('optional object field remains undefined when not provided', async () => {
+		const app = new Elysia().get('/', ({ query }) => query, {
+			query: t.Object({
+				optionalObject: t.Optional(t.Object({}))
+			})
+		})
+		const res = await app.handle(req('/'))
+
+		expect(await res.json()).toEqual({})
+		expect(res.status).toBe(200)
+	})
 })
